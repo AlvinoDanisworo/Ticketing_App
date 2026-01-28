@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\TiketController;
 use App\Http\Controllers\User\OrderController;
+use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\User\EventController as UserEventController;
@@ -39,6 +40,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('tickets', TiketController::class);
 
         Route::resource('categories', CategoryController::class);
+
+        Route::resource('locations', LocationController::class);
 
         Route::get('/histories', [HistoriesController::class, 'index'])->name('histories.index');
         Route::get('/histories/{id}', [HistoriesController::class, 'show'])->name('histories.show');

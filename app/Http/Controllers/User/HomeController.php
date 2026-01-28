@@ -20,6 +20,10 @@ class HomeController extends Controller
             $eventsQuery->where('kategori_id', $request->kategori);
         }
 
+        if ($request->has('search') && $request->search) {
+            $eventsQuery->where('judul', 'like', '%' . $request->search . '%');
+        }
+
         $events = $eventsQuery->get();
 
         return view('home', compact('events', 'categories'));

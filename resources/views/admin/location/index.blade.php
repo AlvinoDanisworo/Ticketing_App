@@ -1,4 +1,4 @@
-<x-layouts.admin title="Manajemen Event">
+<x-layouts.admin title="Manajemen Lokasi">
     @if (session('success'))
         <div class="toast toast-bottom toast-center">
             <div class="alert alert-success">
@@ -15,38 +15,32 @@
 
     <div class="container mx-auto p-10">
         <div class="flex">
-            <h1 class="text-3xl font-semibold mb-4">Manajemen Event</h1>
-            <a href="{{ route('admin.events.create') }}" class="btn btn-primary ml-auto">Tambah Event</a>
+            <h1 class="text-3xl font-semibold mb-4">Manajemen Lokasi</h1>
+            <a href="{{ route('admin.locations.create') }}" class="btn btn-primary ml-auto">Tambah Lokasi</a>
         </div>
         <div class="overflow-x-auto rounded-box bg-white p-5 shadow-xs">
             <table class="table">
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th class="w-1/3">Judul</th>
-                        <th>Kategori</th>
-                        <th>Tanggal</th>
-                        <th>Lokasi</th>
+                        <th class="w-1/3">Nama Lokasi</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($events as $index => $event)
+                    @forelse ($locations as $index => $location)
                     <tr>
                         <th>{{ $index + 1 }}</th>
-                        <td>{{ $event->judul }}</td>
-                        <td>{{ $event->kategori->nama }}</td>
-                        <td>{{ $event->tanggal_waktu->format('d M Y') }}</td>
-                        <td>{{ $event->location?->nama_lokasi ?? '-' }}</td>
+                        <td>{{ $location->nama_lokasi }}</td>
                         <td>
-                            <a href="{{ route('admin.events.show', $event->id) }}" class="btn btn-sm btn-info mr-2">Detail</a>
-                            <a href="{{ route('admin.events.edit', $event->id) }}" class="btn btn-sm btn-primary mr-2">Edit</a>
-                            <button class="btn btn-sm bg-red-500 text-white" onclick="openDeleteModal(this)" data-id="{{ $event->id }}">Hapus</button>
+                            <a href="{{ route('admin.locations.show', $location->id) }}" class="btn btn-sm btn-info mr-2">Detail</a>
+                            <a href="{{ route('admin.locations.edit', $location->id) }}" class="btn btn-sm btn-primary mr-2">Edit</a>
+                            <button class="btn btn-sm bg-red-500 text-white" onclick="openDeleteModal(this)" data-id="{{ $location->id }}">Hapus</button>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center">Tidak ada event tersedia.</td>
+                        <td colspan="6" class="text-center">Tidak ada lokasi tersedia.</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -60,10 +54,10 @@
             @csrf
             @method('DELETE')
 
-            <input type="hidden" name="event_id" id="delete_event_id">
+            <input type="hidden" name="location_id" id="delete_location_id">
 
-            <h3 class="text-lg font-bold mb-4">Hapus Event</h3>
-            <p>Apakah Anda yakin ingin menghapus event ini?</p>
+            <h3 class="text-lg font-bold mb-4">Hapus Lokasi</h3>
+            <p>Apakah Anda yakin ingin menghapus lokasi ini?</p>
             <div class="modal-action">
                 <button class="btn btn-primary" type="submit">Hapus</button>
                 <button class="btn" onclick="delete_modal.close()" type="reset">Batal</button>
@@ -75,10 +69,10 @@
         function openDeleteModal(button) {
             const id = button.dataset.id;
             const form = document.querySelector('#delete_modal form');
-            document.getElementById("delete_event_id").value = id;
+            document.getElementById("delete_location_id").value = id;
 
             // Set action dengan parameter ID
-            form.action = `/admin/events/${id}`
+            form.action = `/admin/locations/${id}`
 
             delete_modal.showModal();
         }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Event;
 use App\Models\Kategori;
+use App\Models\Location;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::all(); // menampilkan semua data event dari database, data di simpan dalam variabel events
+        $events = Event::with(['kategori', 'location'])->get(); // menampilkan semua data event dari database, data di simpan dalam variabel events
         return view('admin.event.index', compact('events')); // mengirim data ke view admin.event.index
     }
 
@@ -25,7 +26,8 @@ class EventController extends Controller
     public function create()
     {
         $categories = Kategori::all(); // mengambil semua data kategori dari database
-        return view('admin.event.create', compact('categories')); // mengirim data kategori ke view admin.event.create yang akan digunakan dengan dropdown
+        $locations = Location::all(); // mengambil semua data lokasi dari database
+        return view('admin.event.create', compact('categories', 'locations')); // mengirim data kategori dan lokasi ke view admin.event.create yang akan digunakan dengan dropdown
     }
 
     /**
@@ -37,7 +39,7 @@ class EventController extends Controller
             'judul' => 'required|string|max:255',
             'deskripsi' => 'required|string',
             'tanggal_waktu' => 'required|date',
-            'lokasi' => 'required|string|max:255',
+            'location_id' => 'required|exists:locations,id',
             'kategori_id' => 'required|exists:kategoris,id',
             'gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -72,7 +74,8 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
         $categories = Kategori::all();
-        return view('admin.event.edit', compact('event', 'categories'));
+        $locations = Location::all();
+        return view('admin.event.edit', compact('event', 'categories', 'locations'));
     }
 
     /**
@@ -87,7 +90,7 @@ class EventController extends Controller
                 'judul' => 'required|string|max:255',
                 'deskripsi' => 'required|string',
                 'tanggal_waktu' => 'required|date',
-                'lokasi' => 'required|string|max:255',
+                'location_id' => 'required|exists:locations,id',
                 'kategori_id' => 'required|exists:kategoris,id',
                 'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);

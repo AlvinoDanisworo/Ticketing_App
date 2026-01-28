@@ -28,6 +28,18 @@
                     <span class="is-drawer-close:hidden">Manajemen Kategori</span>
                 </a>
             </li>
+
+            <!-- Kategori item -->
+            <li class="{{ request()->routeIs('admin.locations.*') ? 'bg-gray-200 rounded-lg' : '' }}">
+                <a href="{{ route('admin.locations.index') }}" class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Lokasi">
+                    <!-- icon Lokasi -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">   
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"     d="M12 21s-6-5.33-6-10a6 6 0 1 1 12 0c0 4.67-6 10-6 10z"/>   
+                        <circle cx="12" cy="11" r="2.5" fill="currentColor"/> 
+                    </svg>
+                    <span class="is-drawer-close:hidden">Manajemen Lokasi</span>
+                </a>
+            </li>
             
             <!-- Event item -->
             <li class="{{ request()->routeIs('admin.events.*') ? 'bg-gray-200 rounded-lg' : '' }}">

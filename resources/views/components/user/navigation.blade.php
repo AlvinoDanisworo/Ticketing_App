@@ -13,7 +13,15 @@
         </a>
     </div>
     <div class="navbar-center hidden lg:flex">
-        <input class="input w-72" placeholder="Cari Event..." />
+        <form method="GET" action="{{ route('home') }}" class="w-full">
+            <input 
+                type="text" 
+                name="search" 
+                class="input w-72" 
+                placeholder="Cari Event..." 
+                value="{{ request('search') }}"
+            />
+        </form>
     </div>
     <div class="navbar-end gap-2">
         <!-- check user session -->
