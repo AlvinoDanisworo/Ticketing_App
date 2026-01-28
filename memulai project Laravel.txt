@@ -1,0 +1,120 @@
+memulai project Laravel
+mulai dengan composer create-project Laravel/Laravel ....(nama project)
+.env nya berbeda ya guys dengan next, dan menurutku untuk Laravel lebih jelas dan rapi
+lalu kita perlu migrate database kita (dibuatkan lalu diambil oleh PHP nya) pake php artisan migrate
+untuk menjalankan server perlu "php artisan serve"
+
+2. Migration dan Model (Konteks MVC)
+jadi model itu penghubung kode php dan database
+migration itu digunakan untuk bagaimana data data di database bekerja dan terhubung (menentukan struktur dan konfigurasi table)
+intinya migration itu kayak nulis query sql, tapi itu dilakukan di php nya, bukan di database nya
+ini keywordnya "php artisan migrate"
+letaknya di database/migrate dan untuk models ada di app/models
+
+3. Seeder 
+mengisi table
+letaknya di database/seeder
+fungsinya tentunya bedain mana data dummy dan mana data beneran
+keywordnya "php artisan make:seeder .....Seeder"
+kalua mau jalanin satu satu "php artisan db:seed --class=.....Seeder"
+kalua mau langsung semuanya "php artisan db:seed" yang sebelumnya perlu costum file DatabaseSeeder.php dulu
+
+4. Authentication System
+kalua di Laravel kita bisa pake Laravel breeze
+kalua di Laravel mau install library atau mau nambahin pake tu pake "composer require Laravel/...."
+of course kita butuh tampilan makannya kita butuh js
+
+5. Dashboard Main
+jujur ribet sumpah Laravel ni, kek apa apa harus di folder ini itu, padahal foldernya banyak banget njir
+
+6. Middleware
+jadi middleware adalah sebuah komponen khusus di Laravel yang dipake buat perantara antara request dan response
+jalan sebelum masuk ke controller
+biasanya dipake untuk keamanan (login)
+
+7. Storage Link
+jadi di Laravel gambar itu disimpan di dalam folder storage, yang tidak bisa langsung diakses oleh web browser
+kita perlu storage link untuk bisa menampilkan gambar
+fungsinya adalah sebagai shortcut antara folder storage/app/public dengan public/storage
+perintahnya ini "php artisan storage:link"
+
+Jika besok diperlukan saat ujian, karena mengerjakan wajib menggunakan PC lab.
+Cara clone project: 
+1. buka repository GitHub di browser, copy url repository
+2. buat folder baru di komputer, buka di vs code
+3. buka terminal, jalankan perintah : git clone (url repository), tunggu sampai selesai
+4. masuk ke direktori project, menu file-open folder, pilih folder project
+5. buka terminal, jalankan perintah : composer install, tunggu sampai selesai
+6. buka terminal, jalankan perintah : npm install, tunggu sampai selesai
+7. rename file .env.example menjadi .env, atur konfigurasi database (biasanya di baris 23)
+8. buka terminal, jalankan perintah : php artisan key:generate
+9. buka terminal, jalankan perintah : php artisan migrate
+10. buka terminal, jalankan perintah : php artisan db:seed
+11. buka terminal baru, jalankan perintah : php artisan serve
+12. buka terminal baru, jalankan perintah : npm run dev
+13. jgn lupa php artisan storage:link
+
+disarankan : pakai terminal yang tipenya Command Prompt
+
+
+1. php artisan migrate dulu
+2. terus kita bikin model dengan php artisan make:model ... -m
+3. setelahnya kita perlu php artisan migrate lagi untuk masukin ke database ygy, atau pake php artisan migrate:fresh biar dibikin ulang semua
+4. selanjutnya mengisi database dengan data seeder, dengan php artisan make:seeder namaSeeder lalu jalankan php artisan db:seed --class=namaSeeder
+resources/views/components/user/navigation.blade.php
+  <div class="navbar-center hidden lg:flex">
+        <form method="GET" action="{{ route('home') }}" class="w-full">
+            <input 
+                type="text" 
+                name="search" 
+                class="input w-72" 
+                placeholder="Cari Event..." 
+                value="{{ request('search') }}"
+            />
+        </form>
+    </div>
+
+Http/controllers/user/homecontroller.php
+if ($request->has('search') && $request->search) {
+            $eventsQuery->where('judul', 'like', '%' . $request->search . '%');
+        }
+
+tambahin lewat php artisan make:model Location -m
+use HasFactory;
+
+    protected $table = 'locations';
+
+    protected $fillable = [
+        'nama_lokasi',
+    ];
+
+    public function events()
+    {
+        return $this->hasMany(Event::class, 'location_id');
+    }
+
+event
+public function location()
+    {
+        return $this->belongsTo(Lokasi::class);
+    }
+
+php artisan make:controller Admin/LocationController --resource
+
+
+php artisan make:seeder LocationSeeder
+
+public function run(): void
+    {
+        $locations = [
+            ["nama_lokasi" => "Stadion Utama"],
+            ["nama_lokasi" => "Galeri Seni Kota"],
+            ["nama_lokasi" => "Taman Kota"]
+        ];
+        foreach ($locations as $location) {
+            Location::create($location);
+        }
+
+php artisan db:seed --class=LocationSeeder
+
+
